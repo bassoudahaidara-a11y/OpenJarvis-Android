@@ -22,8 +22,14 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      # GitHub-hosted Ubuntu runners already include the Android SDK.
+      # Do not use android-actions/setup-android here: its default setup
+      # attempts to install the obsolete SDK package named "tools".
+      - name: Check Android SDK manager
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          command -v sdkmanager
+          sdkmanager --version
 
       - name: Accept Android SDK licenses
         run: yes | sdkmanager --licenses || true
